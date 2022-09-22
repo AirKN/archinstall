@@ -30,7 +30,10 @@ pacman --noconfirm -Sy archlinux-keyring
 pacman-key --init && pacman-key --populate archlinux
 pacstrap /mnt base base-devel linux linux-firmware vim
 genfstab -U /mnt >> /mnt/etc/fstab
-arch-chroot /mnt /bin/bash
+sed '1,/^#part2$/d' `basename $0` > /mnt/archinstall2.sh
+chmod +x /mnt/archinstall2.sh
+cd /mnt
+arch-chroot /mnt ./archinstall2.sh
 exit
 
 #part2
@@ -56,21 +59,24 @@ read drive
 grub-install $drive
 grub-mkconfig -o /boot/grub/grub.cfg
 
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono ttf-joypixels ttf-font-awesome mpv man-db xwallpaper xclip zip unzip unrar p7zip xdotool papirus-icon-theme brightnessctl  dosfstools ntfs-3g git sxhkd zsh pipewire pipewire-pulse arc-gtk-theme rsync dash xcompmgr libnotify dunst dmenu slock dhcpcd rsync pamixer mpd ncmpcpp zsh-syntax-highlighting xdg-user-dirs libconfig
-
 curl -LO raw.githubusercontent.com/AirKN/archinstall/main/packagelist
 
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
-pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist)) 
+#pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist)) 
 
 #rm /bin/sh
 #ln -s dash /bin/sh
 echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
 echo "Enter Username: "
 read username
-useradd -m -G wheel -s /bin/zsh $username
+useradd -m $username -G wheel 
 passwd $username
 echo "Pre-Installation Finish Reboot now"
+#ai3path=/home/$username/archinstall3.sh
+#sed '1,/^#part3$/d' archinstall2.sh > $ai3path
+#chown $username:$username $ai3_path
+#chmod +x $ai3path
+#su -c $ai3path -s /bin/sh $username
 umount -R /mnt
 exit
 
