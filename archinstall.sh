@@ -32,6 +32,7 @@ pacman-key --init && pacman-key --populate archlinux
 pacstrap /mnt base base-devel linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot /mnt /bin/bash
+exit
 
 #part2
 printf '\033c'
@@ -57,27 +58,25 @@ read drive
 grub-install $drive
 grub-mkconfig -o /boot/grub/grub.cfg
 
-curl -LO raw.githubusercontent.com/AirKN/archinstall/main/packagelist
-
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
 	noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono ttf-joypixels ttf-font-awesome \
 	sxiv mpv imagemagick  \
 	fzf man-db xwallpaper unclutter xclip maim \
 	zip unzip unrar p7zip xdotool papirus-icon-theme brightnessctl  \
 	dosfstools ntfs-3g git sxhkd zsh pipewire pipewire-pulse \
-	emacs-nox arc-gtk-theme rsync dash \
-	xcompmgr libnotify dunst dmenu slock jq aria2 cowsay \
-	dhcpcd connman wpa_supplicant rsync pamixer mpd ncmpcpp \
-	zsh-syntax-highlighting xdg-user-dirs libconfig \
-	bluez bluez-utils
+	arc-gtk-theme rsync dash \
+	xcompmgr libnotify dunst dmenu slock \
+	dhcpcd rsync pamixer mpd ncmpcpp \
+	zsh-syntax-highlighting xdg-user-dirs libconfig 
 
+
+curl -LO raw.githubusercontent.com/AirKN/archinstall/main/packagelist
 
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
 pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist)) 
 
-systemctl enable connman.service
-rm /bin/sh
-ln -s dash /bin/sh
+#rm /bin/sh
+#ln -s dash /bin/sh
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Enter Username: "
 read username
