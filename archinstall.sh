@@ -1,6 +1,5 @@
 #Arch setup installer
 #part1
-printf '\033c'
 echo "Welcome to air's arch installer script"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 loadkeys us
@@ -29,13 +28,12 @@ mount $bootpart /mnt/boot
 lsblk
 pacman --noconfirm -Sy archlinux-keyring
 pacman-key --init && pacman-key --populate archlinux
-pacstrap /mnt base base-devel linux linux-firmware
+pacstrap /mnt base base-devel linux linux-firmware vim
 genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot /mnt /bin/bash
 exit
 
 #part2
-printf '\033c'
 pacman -S --noconfirm sed
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 ln -sf /usr/share/zoneinfo/Africa/Tunis /etc/localtime
@@ -50,25 +48,15 @@ echo $hostname > /etc/hostname
 echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
-mkinitcpio -P
 passwd
-pacman --noconfirm -S grub
+pacman --noconfirm -S networkmanager grub
+systemctl enable NetworkManager
 echo "Enter the drive: "
 read drive
 grub-install $drive
 grub-mkconfig -o /boot/grub/grub.cfg
 
-pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
-	noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono ttf-joypixels ttf-font-awesome \
-	sxiv mpv imagemagick  \
-	fzf man-db xwallpaper unclutter xclip maim \
-	zip unzip unrar p7zip xdotool papirus-icon-theme brightnessctl  \
-	dosfstools ntfs-3g git sxhkd zsh pipewire pipewire-pulse \
-	arc-gtk-theme rsync dash \
-	xcompmgr libnotify dunst dmenu slock \
-	dhcpcd rsync pamixer mpd ncmpcpp \
-	zsh-syntax-highlighting xdg-user-dirs libconfig 
-
+pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono ttf-joypixels ttf-font-awesome mpv man-db xwallpaper xclip zip unzip unrar p7zip xdotool papirus-icon-theme brightnessctl  dosfstools ntfs-3g git sxhkd zsh pipewire pipewire-pulse arc-gtk-theme rsync dash xcompmgr libnotify dunst dmenu slock dhcpcd rsync pamixer mpd ncmpcpp zsh-syntax-highlighting xdg-user-dirs libconfig
 
 curl -LO raw.githubusercontent.com/AirKN/archinstall/main/packagelist
 
@@ -77,11 +65,12 @@ pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
 #rm /bin/sh
 #ln -s dash /bin/sh
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
 echo "Enter Username: "
 read username
 useradd -m -G wheel -s /bin/zsh $username
 passwd $username
 echo "Pre-Installation Finish Reboot now"
+umount -R /mnt
 exit
 
