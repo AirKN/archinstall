@@ -59,6 +59,8 @@ read drive
 grub-install $drive
 grub-mkconfig -o /boot/grub/grub.cfg
 
+curl -LO raw.githubusercontent.com/AirKN/archinstall/main/packagelist
+
 pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xbacklight xorg-xprop \
 	noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono ttf-joypixels ttf-font-awesome \
 	sxiv mpv imagemagick  \
