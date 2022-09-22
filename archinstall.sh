@@ -3,7 +3,6 @@
 printf '\033c'
 echo "Welcome to air's arch installer script"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
-pacman --noconfirm -Sy archlinux-keyring
 loadkeys us
 timedatectl set-ntp true
 lsblk
@@ -28,12 +27,11 @@ mount $partition /mnt
 mkdir /mnt/boot
 mount $bootpart /mnt/boot
 lsblk
+pacman --noconfirm -Sy archlinux-keyring
+pacman-key --init && pacman-key --populate archlinux
 pacstrap /mnt base base-devel linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
-sed '1,/^#part2$/d' `basename $0` > /mnt/arch_install2.sh
-chmod +x /mnt/arch_install2.sh
-arch-chroot /mnt ./arch_install2.sh
-exit
+arch-chroot /mnt /bin/bash
 
 #part2
 printf '\033c'
@@ -74,8 +72,8 @@ pacman -S --noconfirm xorg-server xorg-xinit xorg-xkill xorg-xsetroot xorg-xback
 	bluez bluez-utils
 
 
-pacman -S --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
-pacman -Rsu $(comm -23 <(pacman -Qq | sort) <(sort packagelist)) 
+pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
+pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist)) 
 
 systemctl enable connman.service
 rm /bin/sh
@@ -86,10 +84,5 @@ read username
 useradd -m -G wheel -s /bin/zsh $username
 passwd $username
 echo "Pre-Installation Finish Reboot now"
-ai3_path=/home/$username/arch_install3.sh
-sed '1,/^#part3$/d' arch_install2.sh > $ai3_path
-chown $username:$username $ai3_path
-chmod +x $ai3_path
-su -c $ai3_path -s /bin/sh $username
 exit
 
