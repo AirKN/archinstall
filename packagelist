@@ -10,13 +10,17 @@ noto-fonts-cjk
 ttf-jetbrains-mono
 ttf-joypixels
 ttf-font-awesome
+git
+zsh
+mpd
+xcompmgr
+unclutter
+pipewire
 mpv
 man-db
 xclip
 brightnessctl
 ntfs-3g
-git
-zsh
 rsync
 dash
 dunst
@@ -43,6 +47,7 @@ ffmpeg
 ffmpegthumbnailer
 gimp
 i3-gaps
+i3bar
 i3lock
 lf
 lxappearance

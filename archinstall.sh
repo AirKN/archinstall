@@ -59,19 +59,35 @@ read drive
 grub-install $drive
 grub-mkconfig -o /boot/grub/grub.cfg
 
+# Make pacman colorful, concurrent downloads and Pacman eye-candy.
+grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
+
+cd /opt
+git clone https://aur.archlinux.org/yay-git.git
+chown -R tecmint:tecmint ./yay-git
+cd yay-git
+makepkg -si
+cd -
+
 curl -LO raw.githubusercontent.com/AirKN/archinstall/main/packagelist
 
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
-#pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist)) 
+#pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
 #rm /bin/sh
 #ln -s dash /bin/sh
 echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
 echo "Enter Username: "
 read username
-useradd -m $username -G wheel 
+useradd -m $username -G wheel
 passwd $username
+
+# Most important command! Get rid of the beep!
+rmmod pcspkr
+echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 echo "Pre-Installation Finish Reboot now"
+
 #ai3path=/home/$username/archinstall3.sh
 #sed '1,/^#part3$/d' archinstall2.sh > $ai3path
 #chown $username:$username $ai3_path
