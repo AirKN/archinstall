@@ -1,6 +1,15 @@
-#Arch setup installer
+#!/bin/bash
+
+#Arch install script
+#written by and customized specifically for:
+#    _    ___ ____
+#   / \  |_ _|  _ \
+#  / _ \  | || |_) |
+# / ___ \ | ||  _ <
+#/_/   \_\___|_| \_\
+#
 #part1
-echo "Welcome to air's arch installer script"
+echo "Welcome to air's arch install script"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 loadkeys us
 timedatectl set-ntp true
@@ -37,6 +46,7 @@ arch-chroot /mnt ./archinstall2.sh
 exit
 
 #part2
+clear
 pacman -S --noconfirm sed
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 ln -sf /usr/share/zoneinfo/Africa/Tunis /etc/localtime
@@ -70,29 +80,75 @@ cd yay-git
 makepkg -si
 cd -
 
-curl -LO raw.githubusercontent.com/AirKN/archinstall/main/packagelist
+curl -LO raw.githubusercontent.com/airKN/archinstall/main/packagelist
 
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
 #rm /bin/sh
 #ln -s dash /bin/sh
-echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+echo "Defaults !tty_tickets" >> /etc/sudoers
 echo "Enter Username: "
 read username
 useradd -m $username -G wheel
 passwd $username
 
-# Most important command! Get rid of the beep!
+#gets rid of beep?
 rmmod pcspkr
 echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 echo "Pre-Installation Finish Reboot now"
 
-#ai3path=/home/$username/archinstall3.sh
-#sed '1,/^#part3$/d' archinstall2.sh > $ai3path
-#chown $username:$username $ai3_path
-#chmod +x $ai3path
-#su -c $ai3path -s /bin/sh $username
-umount -R /mnt
-exit
+#part3
 
+mkdir /home/$username/.config
+
+git clone https://github.com/airkn/dwm /home/$username/.config/dwm
+make -C /home/$username/.config/dwm clean install
+
+git clone https://github.com/airkn/st /home/$username/.config/st
+make -C /home/$username/.config/st clean install
+
+mkdir /home/$username/downloads
+
+git clone https://github.com/airkn/dotfiles.git /home/$username/dotfiles
+# sxhkd
+mkdir -p /home/$username/.config/sxhkd
+mv /home/$username/dotfiles/sxhkd/sxhkdrc-standalone /home/$username/.config/sxhkd
+mv /home/$username/.config/sxhkd/sxhkdrc-standalone /home/$username/.config/sxhkd/sxhkdrc
+# zsh
+mv /home/$username/dotfiles/shells/.zshrc /home/$username
+# .xinitrc
+mv /home/$username/dotfiles/xorg/xinitrc /home/$username
+mv /home/$username/xinitrc /home/$username/.xinitrc
+
+pacman -Syu
+pacman -S --noconfirm lib32-pipewire
+grub-mkconfig -o /boot/grub/grub.cfg
+
+echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
+read answer1
+if [[ $answer1 = y ]] ; then
+  mkdir -p /etc/X11/xorg.conf.d
+  mv /home/$username/dotfiles/nvidia/20-nvidia.conf /etc/X11/xorg.conf.d
+  sleep 1s
+  pacman -S --noconfirm --needed nvidia nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
+fi
+
+echo "Any additional packages you'd like to install? [y/n] "
+read answer2
+if [[ $answer2 = y ]] ; then
+  echo "Which packages? "
+  read packages
+  pacman -S --noconfirm $packages
+fi
+
+rm -rf /home/$username/dotfiles
+
+chown -R /home/$username $username
+
+clear
+echo "Installation Complete! Please reboot now!"
+
+sleep 2s
+exit
