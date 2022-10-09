@@ -106,8 +106,18 @@ mkdir /home/$username/.config
 git clone https://github.com/airkn/dwm /home/$username/.config/dwm
 make -C /home/$username/.config/dwm clean install
 
+git clone https://github.com/airkn/dwmblocks /home/$username/.config/dwmblocks
+make -C /home/$username/.config/dwmblocks clean install
+
 git clone https://github.com/airkn/st /home/$username/.config/st
 make -C /home/$username/.config/st clean install
+
+git clone https://github.com/airkn/dmenu /home/$username/.config/dmenu
+make -C /home/$username/.config/dmenu clean install
+
+git clone https://github.com/airkn/sxiv /home/$username/.config/sxiv
+make -C /home/$username/.config/sxiv clean install
+
 
 mkdir /home/$username/downloads
 
