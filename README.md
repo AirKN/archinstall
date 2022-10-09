@@ -1,5 +1,5 @@
 # Arch Install
-Arch installer script, customized to my preferences and settings
+Arch install script, customized to my preferences and settings
 
 ## How to use
 ```
