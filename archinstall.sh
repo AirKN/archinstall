@@ -72,15 +72,17 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # Make pacman colorful, concurrent downloads and Pacman eye-candy.
 grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
 sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
+# Use all cores for compilation.
+sed -i "s/-j2/-j$(nproc)/;/^#MAKEFLAGS/s/^#//" /etc/makepkg.conf
 
 cd /opt
 git clone https://aur.archlinux.org/yay-git.git
-chown -R tecmint:tecmint ./yay-git
+chown -R air:air ./yay-git
 cd yay-git
 makepkg -si
 cd -
 
-curl -LO raw.githubusercontent.com/airKN/archinstall/main/packagelist
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/packagelist
 
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
@@ -122,10 +124,6 @@ make -C /home/$username/.config/sxiv clean install
 mkdir /home/$username/downloads
 
 git clone https://github.com/airkn/dotfiles.git /home/$username/dotfiles
-# sxhkd
-mkdir -p /home/$username/.config/sxhkd
-mv /home/$username/dotfiles/sxhkd/sxhkdrc-standalone /home/$username/.config/sxhkd
-mv /home/$username/.config/sxhkd/sxhkdrc-standalone /home/$username/.config/sxhkd/sxhkdrc
 # zsh
 mv /home/$username/dotfiles/shells/.zshrc /home/$username
 # .xinitrc
