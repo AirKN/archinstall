@@ -62,7 +62,7 @@ echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
 passwd
-pacman --noconfirm -S networkmanager grub
+pacman --noconfirm -S networkmanager grub git
 systemctl enable NetworkManager
 echo "Enter the drive: "
 read drive
@@ -87,8 +87,7 @@ curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
 
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
-yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort ~/repos/archinstall/aurlist))
-
+yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
 
 
 #rm /bin/sh
@@ -103,7 +102,6 @@ passwd $username
 #gets rid of beep?
 rmmod pcspkr
 echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
-echo "Pre-Installation Finish Reboot now"
 
 #part3
 
