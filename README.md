@@ -5,6 +5,6 @@ Arch install script, customized to my preferences and settings
 ```
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/archinstall
 chmod +x archinstall
-sh archinstall
+./archinstall
 ```
 this is good enough for now, i might upload it somewhere else in the future to have a shorter link

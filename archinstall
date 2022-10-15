@@ -75,19 +75,10 @@ sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;/^#MAKEFLAGS/s/^#//" /etc/makepkg.conf
 
-cd /opt
-git clone https://aur.archlinux.org/yay-git.git
-chown -R air:air ./yay-git
-cd yay-git
-makepkg -si
-cd -
-
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
 
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
-yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
 
 
 #rm /bin/sh
@@ -95,39 +86,54 @@ yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Defaults !tty_tickets" >> /etc/sudoers
 echo "Enter Username: "
-read username
-useradd -m $username -G wheel
-passwd $username
+read name
+useradd -m -g wheel -s /bin/zsh "$name"
+usermod -a -G wheel "$name" && mkdir -p /home/"$name" && chown "$name":wheel /home/"$name"
+passwd $name
+export repodir="/home/$name/.local/src"
+mkdir -p "$repodir"
+chown -R "$name":wheel "$(dirname "$repodir")"
 
 #gets rid of beep?
 rmmod pcspkr
 echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
+
+yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
+
+cd /opt
+git clone https://aur.archlinux.org/yay-git.git
+chown -R air:air ./yay-git
+cd yay-git
+makepkg -si
+cd /
+
 #part3
 
-mkdir /home/$username/.local/src
+git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
+mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 
-git clone https://github.com/airkn/dwm /home/$username/.local/src/dwm
-make -C /home/$username/.local/src/dwm clean install
+mkdir /home/$name/.local/src
 
-git clone https://github.com/airkn/dwmblocks /home/$username/.local/src/dwmblocks
-make -C /home/$username/.local/src/dwmblocks clean install
+git clone https://github.com/airkn/dwm $repodir/dwm
+make -C $repodir/dwm clean install
 
-git clone https://github.com/airkn/st /home/$username/.local/src/st
-make -C /home/$username/.local/src/st clean install
+git clone https://github.com/airkn/dwmblocks $repodir/dwmblocks
+make -C $repodir/dwmblocks clean install
 
-git clone https://github.com/airkn/dmenu /home/$username/.local/src/dmenu
-make -C /home/$username/.local/src/dmenu clean install
+git clone https://github.com/airkn/st $repodir/st
+make -C $repodir/st clean install
 
-git clone https://github.com/airkn/othersrc /home/$username/.local/src/othersrc
-make -C /home/$username/.local/src/othersrc/sxiv clean install
-make -C /home/$username/.local/src/othersrc/slock clean install
+git clone https://github.com/airkn/dmenu $repodir/dmenu
+make -C $repodir/dmenu clean install
+
+git clone https://github.com/airkn/othersrc $repodir/othersrc
+make -C $repodir/othersrc/sxiv clean install
+make -C $repodir/othersrc/slock clean install
 
 
-mkdir /home/$username/downloads
-
-git clone https://github.com/airkn/dotfiles /home/$username/dotfiles
-mv /home/$username/dotfiles/* /home/$username/dotfiles/.* /home/$username
+mkdir /home/$name/downloads
 
 pacman -Syu
 pacman -S --noconfirm lib32-pipewire
@@ -136,7 +142,7 @@ echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
 read answer1
 if [[ $answer1 = y ]] ; then
   mkdir -p /etc/X11/xorg.conf.d
-  mv /home/$username/dotfiles/nvidia/20-nvidia.conf /etc/X11/xorg.conf.d
+  mv /home/$name/dotfiles/nvidia/20-nvidia.conf /etc/X11/xorg.conf.d
   sleep 1s
   pacman -S --noconfirm --needed nvidia nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
 fi
@@ -149,9 +155,7 @@ if [[ $answer2 = y ]] ; then
   pacman -S --noconfirm $packages
 fi
 
-rm -rf /home/$username/dotfiles
-
-chown -R /home/$username $username
+rm -rf /home/$name/dotfiles
 
 clear
 echo "Installation Complete! Please reboot now!"
