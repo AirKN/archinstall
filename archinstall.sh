@@ -82,10 +82,14 @@ cd yay-git
 makepkg -si
 cd -
 
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/packagelist
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
 
-pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort packagelist))
+pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
+yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort ~/repos/archinstall/aurlist))
+
+
 
 #rm /bin/sh
 #ln -s dash /bin/sh
@@ -103,36 +107,32 @@ echo "Pre-Installation Finish Reboot now"
 
 #part3
 
-mkdir /home/$username/.config
+mkdir /home/$username/.local/src
 
-git clone https://github.com/airkn/dwm /home/$username/.config/dwm
-make -C /home/$username/.config/dwm clean install
+git clone https://github.com/airkn/dwm /home/$username/.local/src/dwm
+make -C /home/$username/.local/src/dwm clean install
 
-git clone https://github.com/airkn/dwmblocks /home/$username/.config/dwmblocks
-make -C /home/$username/.config/dwmblocks clean install
+git clone https://github.com/airkn/dwmblocks /home/$username/.local/src/dwmblocks
+make -C /home/$username/.local/src/dwmblocks clean install
 
-git clone https://github.com/airkn/st /home/$username/.config/st
-make -C /home/$username/.config/st clean install
+git clone https://github.com/airkn/st /home/$username/.local/src/st
+make -C /home/$username/.local/src/st clean install
 
-git clone https://github.com/airkn/dmenu /home/$username/.config/dmenu
-make -C /home/$username/.config/dmenu clean install
+git clone https://github.com/airkn/dmenu /home/$username/.local/src/dmenu
+make -C /home/$username/.local/src/dmenu clean install
 
-git clone https://github.com/airkn/sxiv /home/$username/.config/sxiv
-make -C /home/$username/.config/sxiv clean install
+git clone https://github.com/airkn/othersrc /home/$username/.local/src/othersrc
+make -C /home/$username/.local/src/othersrc/sxiv clean install
+make -C /home/$username/.local/src/othersrc/slock clean install
 
 
 mkdir /home/$username/downloads
 
-git clone https://github.com/airkn/dotfiles.git /home/$username/dotfiles
-# zsh
-mv /home/$username/dotfiles/shells/.zshrc /home/$username
-# .xinitrc
-mv /home/$username/dotfiles/xorg/xinitrc /home/$username
-mv /home/$username/xinitrc /home/$username/.xinitrc
+git clone https://github.com/airkn/dotfiles /home/$username/dotfiles
+mv /home/$username/dotfiles/* /home/$username/dotfiles/.* /home/$username
 
 pacman -Syu
 pacman -S --noconfirm lib32-pipewire
-grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
 read answer1
