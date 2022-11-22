@@ -75,8 +75,8 @@ sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;/^#MAKEFLAGS/s/^#//" /etc/makepkg.conf
 
+echo "Installing packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
-
 pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
@@ -98,19 +98,25 @@ chown -R "$name":wheel "$(dirname "$repodir")"
 rmmod pcspkr
 echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
-
-yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
-
+echo "Installing the Aur Helper yay.."
 cd /opt
 git clone https://aur.archlinux.org/yay-git.git
-chown -R air:air ./yay-git
+chown -R $name:$name ./yay-git
 cd yay-git
 makepkg -si
 cd /
+yay -Syu --noconfirm
+
+echo "Installing AUR packages from the list.."
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
+yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
+
+echo "Installing the Archstrike Repository.."
+
 
 #part3
 
+echo "Cloning and Building the window manager & dotfiles from git repos.."
 git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
 mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 
@@ -135,7 +141,8 @@ make -C $repodir/othersrc/slock clean install
 
 mkdir /home/$name/downloads
 
-pacman -Syu
+echo "Installing a few additional packages.."
+pacman -Syu --noconfirm
 pacman -S --noconfirm lib32-pipewire
 
 echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
