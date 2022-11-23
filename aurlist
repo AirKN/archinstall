@@ -1,13 +1,12 @@
 afetch
-ani-cli
 apg
 cadmus-appimage
 cava
-ceph-libs
+lf-bin
+libldap24
 libvterm01
+libxft-bgra
 menu-qalc
-python-cloudscraper
-python-dateparser
-python-pure-protobuf
+rustdesk
 sc-im
 speedometer
