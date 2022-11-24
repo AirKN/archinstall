@@ -24,6 +24,7 @@ mkfs.ext4 /dev/$partition
 echo "Enter the boot partition (sd_#): "
 read bootpart
 mkfs.ext4 /dev/$bootpart
+lsblk
 echo "Did you create a swap partition? [y/n]"
 read answerp
 if [[ $answerp = y ]] ; then
@@ -94,9 +95,6 @@ read name
 useradd -m -g wheel -s /bin/zsh "$name"
 usermod -a -G wheel "$name" && mkdir -p /home/"$name" && chown "$name":wheel /home/"$name"
 passwd $name
-export repodir="/home/$name/.local/src"
-mkdir -p "$repodir"
-chown -R "$name":wheel "$(dirname "$repodir")"
 
 #gets rid of beep?
 rmmod pcspkr
@@ -149,6 +147,11 @@ sudo -u $name yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort a
 
 #part3
 echo "Cloning and Building the window manager & dotfiles from github repos.."
+
+export repodir="/home/$name/.local/src"
+mkdir -p "$repodir"
+chown -R "$name":wheel "$(dirname "$repodir")"
+
 git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
 mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 
@@ -172,14 +175,12 @@ make -C $repodir/othersrc/slock clean install
 mkdir /home/$name/downloads
 
 echo "Installing nvim plugins//"
-mkdir -p "/home/$name/.config/nvim/autoload"
-curl -Ls "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" >  "/home/$name/.config/nvim/autoload/plug.vim"
-chown -R "$name:wheel" "/home/$name/.config/nvim"
 sudo -u "$name" nvim -c "PlugInstall|q|q"
+chsh -s /bin/zsh "$name"
 
 echo "Installing a few additional packages.."
 pacman -Syu --noconfirm
-pacman --noconfirm-S lib32-pipewire
+pacman --noconfirm -S lib32-pipewire
 
 echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
 read answer1
@@ -187,7 +188,7 @@ if [[ $answer1 = y ]] ; then
     mkdir -p /etc/X11/xorg.conf.d
     mv /home/$name/dotfiles/nvidia/20-nvidia.conf /etc/X11/xorg.conf.d
     sleep 1s
-    pacman -S --noconfirm --needed nvidia nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
+    pacman --noconfirm -S --needed nvidia nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
 fi
 
 echo "Would you like to install the entirety of the Archstrike PenTesting packages? [y/n] "
