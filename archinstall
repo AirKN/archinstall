@@ -48,10 +48,10 @@ pacman --noconfirm -Sy archlinux-keyring
 pacman-key --init && pacman-key --populate archlinux
 pacstrap /mnt base base-devel linux linux-firmware vim
 genfstab -U /mnt >> /mnt/etc/fstab
-sed '1,/^#part2$/d' `basename $0` > /mnt/tmp/archinstall2.sh
-chmod +x /mnt/tmp/archinstall2.sh
+sed '1,/^#part2$/d' `basename $0` > /mnt/archinstall2.sh
+chmod +x /mnt/archinstall2.sh
 cd /mnt
-arch-chroot /mnt ./tmp/archinstall2.sh
+arch-chroot /mnt ./archinstall2.sh
 exit
 
 #part2
@@ -71,7 +71,7 @@ echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
 passwd
-pacman --noconfirm -S networkmanager grub git nvim zsh
+pacman --noconfirm -S networkmanager grub git neovim zsh
 systemctl enable NetworkManager
 lsblk
 echo "Enter the drive to install grub on (/dev/sd_): "
@@ -103,12 +103,13 @@ rmmod pcspkr
 echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
 echo "Adding Chaotic-aur mirrorlist.."
-pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
-pacman-key --lsign-key FBA220DFC880C036
+pacman-key --noconfirm --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+pacman-key --noconfirm --lsign-key FBA220DFC880C036
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 echo "[chaotic-aur]" >> /etc/pacman.conf
-echo "Include = /etc/pacman.d/chaotic-mirrorlist\n" >> /etc/pacman.conf
-pacman -Syy
+echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
+echo "" >> /etc/pacman.conf
+pacman -Syy --noconfirm
 
 echo "Adding Archstrike mirrorlist.."
 echo "[chaotic-aur]" >> /etc/pacman.conf
