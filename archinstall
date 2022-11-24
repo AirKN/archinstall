@@ -24,6 +24,14 @@ mkfs.ext4 $partition
 echo "Enter the boot partition: "
 read bootpart
 mkfs.ext4 $bootpart
+echo "Did you create a swap partition? [y/n]"
+read answerp
+if [[ $answerp = y ]] ; then
+  echo "Enter the swap partition: "
+  read swappart
+  mkswap $swappart
+  swapon $swappart
+fi
 
 #read -p "Did you also create efi partition? [y/n]" answer
 #if [[ $answer = y ]] ; then
@@ -40,10 +48,10 @@ pacman --noconfirm -Sy archlinux-keyring
 pacman-key --init && pacman-key --populate archlinux
 pacstrap /mnt base base-devel linux linux-firmware vim
 genfstab -U /mnt >> /mnt/etc/fstab
-sed '1,/^#part2$/d' `basename $0` > /mnt/archinstall2.sh
-chmod +x /mnt/archinstall2.sh
+sed '1,/^#part2$/d' `basename $0` > /mnt/tmp/archinstall2.sh
+chmod +x /mnt/tmp/archinstall2.sh
 cd /mnt
-arch-chroot /mnt ./archinstall2.sh
+arch-chroot /mnt ./tmp/archinstall2.sh
 exit
 
 #part2
@@ -63,7 +71,7 @@ echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
 passwd
-pacman --noconfirm -S networkmanager grub git
+pacman --noconfirm -S networkmanager grub git nvim zsh
 systemctl enable NetworkManager
 lsblk
 echo "Enter the drive to install grub on (/dev/sd_): "
@@ -122,18 +130,18 @@ pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlis
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
 echo "Installing the Aur Helper yay.."
-sudo -u $name mkdir /home/$name/repos
+sudo -u $name mkdir -p /home/$name/repos
 cd /home/$name/repos
-git clone https://aur.archlinux.org/yay-git.git
+sudo -u $name git clone https://aur.archlinux.org/yay-git.git
 chown -R $name:$name ./yay-git
 cd yay-git
-sudo -u $name makepkg -si
-cd /
+makepkg --noconfirm -si
+cd /tmp
 sudo -u $name yay -Syu --noconfirm
 
 echo "Installing AUR packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
-yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
+sudo -u $name yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
 
 echo "Installing the Archstrike Repository.."
 
@@ -161,6 +169,12 @@ make -C $repodir/othersrc/slock clean install
 
 
 mkdir /home/$name/downloads
+
+echo "Installing nvim plugins//"
+mkdir -p "/home/$name/.config/nvim/autoload"
+curl -Ls "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" >  "/home/$name/.config/nvim/autoload/plug.vim"
+chown -R "$name:wheel" "/home/$name/.config/nvim"
+sudo -u "$name" nvim -c "PlugInstall|q|q"
 
 echo "Installing a few additional packages.."
 pacman -Syu --noconfirm
