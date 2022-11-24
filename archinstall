@@ -100,31 +100,10 @@ passwd $name
 rmmod pcspkr
 echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
-echo "Adding Chaotic-aur mirrorlist.."
-pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
-pacman-key --lsign-key FBA220DFC880C036
-pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-echo "[chaotic-aur]" >> /etc/pacman.conf
-echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
-echo "" >> /etc/pacman.conf
-pacman -Syy --noconfirm
-
-echo "Adding Archstrike mirrorlist.."
-echo "[archstrike]" >> /etc/pacman.conf
-echo "Server = https://mirror.archstrike.org/\$arch/\$repo" >> /etc/pacman.conf
-pacman -Syy --noconfirm
-pacman-key --init
-dirmngr < /dev/null
-pacman-key -r 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
-pacman-key --lsign-key 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
-pacman --noconfirm -S archstrike-keyring archstrike-mirrorlist
-sed -i '$d' /etc/pacman.conf
-echo "Include = /etc/pacman.d/archstrike-mirrorlist" >> /etc/pacman.conf
-pacman -Syy --noconfirm
 
 echo "Installing needed base-devel packages.."
 pacman --noconfirm -R pulseaudio
-pacman --noconfirm -S --needed base-devel neovim zsh lib32-pipewire
+pacman --noconfirm -S --needed base-devel neovim zsh
 
 echo "Installing packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
@@ -134,9 +113,9 @@ pacman --noconfirm -S --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlis
 echo "Installing the Aur Helper yay.."
 sudo -u $name mkdir -p /home/$name/repos
 cd /home/$name/repos
-sudo -u $name git clone https://aur.archlinux.org/yay-git.git
-chown -R $name:wheel yay-git
-cd yay-git
+sudo -u $name git clone https://aur.archlinux.org/yay.git
+chown -R $name:wheel yay
+cd yay
 sudo -u $name makepkg --noconfirm -si
 cd /tmp
 sudo -u $name yay -Syu --noconfirm
@@ -175,11 +154,34 @@ mkdir /home/$name/downloads
 
 echo "Installing nvim plugins//"
 sudo -u "$name" nvim -c "PlugInstall|q|q"
-chsh -s /bin/zsh "$name"
+#chsh -s /bin/zsh "$name"
 
 echo "Installing a few additional packages.."
-pacman -Syu --noconfirm
-pacman --noconfirm -S
+pacman --noconfirm -S lib32-pipewire
+
+
+echo "Adding Chaotic-aur mirrorlist.."
+pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+pacman-key --lsign-key FBA220DFC880C036
+pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+echo "[chaotic-aur]" >> /etc/pacman.conf
+echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
+echo "" >> /etc/pacman.conf
+pacman -Sy --noconfirm
+
+echo "Adding Archstrike mirrorlist.."
+echo "[archstrike]" >> /etc/pacman.conf
+echo "Server = https://mirror.archstrike.org/\$arch/\$repo" >> /etc/pacman.conf
+pacman -Sy --noconfirm
+pacman-key --init
+dirmngr < /dev/null
+pacman-key -r 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
+pacman-key --lsign-key 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
+pacman --noconfirm -S archstrike-keyring archstrike-mirrorlist
+sed -i '$d' /etc/pacman.conf
+echo "Include = /etc/pacman.d/archstrike-mirrorlist" >> /etc/pacman.conf
+pacman -Sy --noconfirm
+
 echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
 read answer1
 if [[ $answer1 = y ]] ; then
