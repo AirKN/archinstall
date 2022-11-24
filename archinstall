@@ -111,29 +111,31 @@ echo "" >> /etc/pacman.conf
 pacman -Syy --noconfirm
 
 echo "Adding Archstrike mirrorlist.."
-echo "[chaotic-aur]" >> /etc/pacman.conf
+echo "[archstrike]" >> /etc/pacman.conf
 echo "Server = https://mirror.archstrike.org/\$arch/\$repo" >> /etc/pacman.conf
 pacman -Syy --noconfirm
 pacman-key --init
 dirmngr < /dev/null
 pacman-key -r 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
 pacman-key --lsign-key 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
-pacman -S archstrike-keyring archstrike-mirrorlist
+pacman --noconfirm -S archstrike-keyring archstrike-mirrorlist
 sed -i '$d' /etc/pacman.conf
 echo "Include = /etc/pacman.d/archstrike-mirrorlist" >> /etc/pacman.conf
 pacman -Syy --noconfirm
 
+echo "Installing needed base-devel packages.."
+pacman -S --needed base-devel
 
 echo "Installing packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
-pacman -S --noconfirm --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
+pacman --noconfirm -S --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
 echo "Installing the Aur Helper yay.."
 sudo -u $name mkdir -p /home/$name/repos
 cd /home/$name/repos
 sudo -u $name git clone https://aur.archlinux.org/yay-git.git
-chown -R $name:$name ./yay-git
+chown -R $name:wheel yay-git
 cd yay-git
 sudo -u $name makepkg --noconfirm -si
 cd /tmp
@@ -142,8 +144,6 @@ sudo -u $name yay -Syu --noconfirm
 echo "Installing AUR packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
 sudo -u $name yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
-
-echo "Installing the Archstrike Repository.."
 
 
 #part3
