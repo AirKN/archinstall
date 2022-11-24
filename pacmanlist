@@ -14,7 +14,6 @@ adobe-source-han-serif-jp-fonts
 adobe-source-sans-fonts
 adwaita-icon-theme
 afetch
-aircrack-ng
 alsa-card-profiles
 alsa-firmware
 alsa-lib
@@ -24,9 +23,6 @@ alsa-topology-conf
 alsa-ucm-conf
 alsa-utils
 alure
-android-sdk-platform-tools
-android-tools
-android-udev
 anthy
 aom
 apg
@@ -35,8 +31,6 @@ apr
 apr-util
 archlinux-appstream-data
 archlinux-keyring
-archstrike-keyring
-archstrike-mirrorlist
 argon2
 aria2
 asciidoc
@@ -52,11 +46,9 @@ avahi
 ayatana-ido
 b43-fwcutter
 babl
-balena-etcher
 base
 bash
 bash-completion
-bashrc-manjaro
 bat
 bc
 bind
@@ -144,12 +136,7 @@ dnsmasq
 dnssec-anchors
 docbook-xml
 docbook-xsl
-docker
 dosfstools
-dotnet-host
-dotnet-runtime
-dotnet-sdk
-dotnet-targeting-pack
 double-conversion
 doxygen
 dpkg
@@ -159,7 +146,6 @@ e2fsprogs
 ecryptfs-utils
 efibootmgr
 efivar
-egl-wayland
 eglexternalplatform
 electron17
 electron18
@@ -501,7 +487,6 @@ lib32-ncurses
 lib32-nettle
 lib32-nspr
 lib32-nss
-lib32-nvidia-utils
 lib32-ocl-icd
 lib32-openal
 lib32-openssl
@@ -522,8 +507,6 @@ lib32-systemd
 lib32-tdb
 lib32-util-linux
 lib32-v4l-utils
-lib32-vulkan-icd-loader
-lib32-wayland
 lib32-xz
 lib32-zlib
 lib32-zstd
@@ -713,7 +696,6 @@ libqxp
 libraqm
 libraw
 libraw1394
-libreoffice-still
 librevenge
 librsvg
 libsamplerate
@@ -861,8 +843,6 @@ make
 man-db
 man-pages
 mangal-bin
-manjaro-keyring
-manjaro-system
 mathjax2
 mbedtls
 md4c
@@ -879,13 +859,6 @@ mesa-utils
 meson
 metacity
 metis
-mhwd
-mhwd-amdgpu
-mhwd-ati
-mhwd-db
-mhwd-nvidia
-mhwd-nvidia-390xx
-mhwd-nvidia-470xx
 midori
 miniupnpc
 minizip
@@ -905,8 +878,6 @@ mpg123
 mpv
 msgpack-c
 msmtp
-mssql-scripter
-mssql-server
 mtdev
 mtools
 mtpfs
@@ -916,8 +887,6 @@ mutt
 mypaint
 mypaint-brushes
 mypaint-brushes1
-nano
-nano-syntax-highlighting
 nasm
 ncmpcpp
 ncspot
@@ -961,8 +930,6 @@ ntfs-3g
 ntp
 numactl
 numlockx
-nvidia-dkms
-nvidia-utils
 oath-toolkit
 obsidian
 ocl-icd
@@ -1165,7 +1132,6 @@ python-keyutils
 python-lxml
 python-magic
 python-mako
-python-manjaro-sdk
 python-markdown
 python-markupsafe
 python-matplotlib-inline
@@ -1282,7 +1248,6 @@ qt6-declarative
 qt6-imageformats
 qt6-svg
 qt6-translations
-qt6-wayland
 quazip-qt5
 radare2
 raptor
@@ -1391,11 +1356,9 @@ speedometer
 speex
 speexdsp
 spirv-tools
-spotify
 sqlcipher
 sqlite
 sqlitebrowser
-sqltoolsservice
 squashfs-tools
 sratom
 srt
@@ -1420,7 +1383,6 @@ systemd-libs
 systemd-sysvcompat
 t1lib
 taglib
-talend-open-studio-esb
 talloc
 tar
 tbb
@@ -1443,7 +1405,6 @@ thunar-volman
 thunarx-python
 tig
 timeshift
-timeshift-autosnap-manjaro
 tlp
 tmux
 tor
@@ -1485,15 +1446,10 @@ virtualbox-host-dkms
 vmaf
 volume_key
 vpnc
-vscodium
 vte-common
 vte3
-vulkan-headers
-vulkan-icd-loader
-vulkan-tools
 w3m
 wavpack
-wayland
 web-installer-url-handler
 webkit2gtk
 webkit2gtk-4.1
@@ -1541,7 +1497,6 @@ xf86-video-intel
 xfconf
 xfdesktop
 xfsprogs
-xfwm4
 xiccd
 xkeyboard-config
 xmlsec
