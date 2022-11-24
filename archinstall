@@ -72,7 +72,7 @@ echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
 passwd
-pacman --noconfirm -S networkmanager grub git neovim zsh
+pacman --noconfirm -S networkmanager grub git
 systemctl enable NetworkManager
 lsblk
 echo "Enter the drive to install grub on (sd_): "
@@ -123,7 +123,8 @@ echo "Include = /etc/pacman.d/archstrike-mirrorlist" >> /etc/pacman.conf
 pacman -Syy --noconfirm
 
 echo "Installing needed base-devel packages.."
-pacman --noconfirm -S --needed base-devel
+pacman --noconfirm -R pulseaudio
+pacman --noconfirm -S --needed base-devel neovim zsh lib32-pipewire
 
 echo "Installing packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
@@ -143,7 +144,6 @@ sudo -u $name yay -Syu --noconfirm
 echo "Installing AUR packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
 sudo -u $name yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
-
 
 #part3
 echo "Cloning and Building the window manager & dotfiles from github repos.."
@@ -171,7 +171,6 @@ git clone https://github.com/airkn/othersrc $repodir/othersrc
 make -C $repodir/othersrc/sxiv clean install
 make -C $repodir/othersrc/slock clean install
 
-
 mkdir /home/$name/downloads
 
 echo "Installing nvim plugins//"
@@ -180,8 +179,7 @@ chsh -s /bin/zsh "$name"
 
 echo "Installing a few additional packages.."
 pacman -Syu --noconfirm
-pacman --noconfirm -S lib32-pipewire
-
+pacman --noconfirm -S
 echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
 read answer1
 if [[ $answer1 = y ]] ; then
