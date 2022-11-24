@@ -14,24 +14,25 @@ sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 loadkeys us
 timedatectl set-ntp true
 lsblk
-echo "Enter the drive: "
+echo "Enter the drive (sd_): "
 read drive
-cfdisk $drive
+cfdisk /dev/$drive
 lsblk
-echo "Enter the linux partition: "
+echo "Enter the linux partition (sd_#): "
 read partition
-mkfs.ext4 $partition
-echo "Enter the boot partition: "
+mkfs.ext4 /dev/$partition
+echo "Enter the boot partition (sd_#): "
 read bootpart
-mkfs.ext4 $bootpart
+mkfs.ext4 /dev/$bootpart
 echo "Did you create a swap partition? [y/n]"
 read answerp
 if [[ $answerp = y ]] ; then
-  echo "Enter the swap partition: "
+  echo "Enter the swap partition (sd_#): "
   read swappart
-  mkswap $swappart
-  swapon $swappart
+  mkswap /dev/$swappart
+  swapon /dev/$swappart
 fi
+
 
 #read -p "Did you also create efi partition? [y/n]" answer
 #if [[ $answer = y ]] ; then
@@ -73,9 +74,9 @@ passwd
 pacman --noconfirm -S networkmanager grub git neovim zsh
 systemctl enable NetworkManager
 lsblk
-echo "Enter the drive to install grub on (/dev/sd_): "
+echo "Enter the drive to install grub on (sd_): "
 read drive
-grub-install $drive
+grub-install /dev/$drive
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Make pacman colorful, concurrent downloads and Pacman eye-candy.
