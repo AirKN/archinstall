@@ -125,7 +125,7 @@ echo "Include = /etc/pacman.d/archstrike-mirrorlist" >> /etc/pacman.conf
 pacman -Syy --noconfirm
 
 echo "Installing needed base-devel packages.."
-pacman -S --needed base-devel
+pacman --noconfirm -S --needed base-devel
 
 echo "Installing packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
@@ -179,7 +179,7 @@ sudo -u "$name" nvim -c "PlugInstall|q|q"
 
 echo "Installing a few additional packages.."
 pacman -Syu --noconfirm
-pacman -S --noconfirm lib32-pipewire
+pacman --noconfirm-S lib32-pipewire
 
 echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
 read answer1
