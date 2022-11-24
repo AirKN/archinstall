@@ -56,7 +56,6 @@ exit
 
 #part2
 clear
-pacman -S --noconfirm sed
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 ln -sf /usr/share/zoneinfo/Africa/Tunis /etc/localtime
 hwclock --systohc
@@ -103,9 +102,9 @@ rmmod pcspkr
 echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
 echo "Adding Chaotic-aur mirrorlist.."
-pacman-key --noconfirm --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
-pacman-key --noconfirm --lsign-key FBA220DFC880C036
-pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+pacman-key --lsign-key FBA220DFC880C036
+pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 echo "[chaotic-aur]" >> /etc/pacman.conf
 echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
 echo "" >> /etc/pacman.conf
@@ -136,7 +135,7 @@ cd /home/$name/repos
 sudo -u $name git clone https://aur.archlinux.org/yay-git.git
 chown -R $name:$name ./yay-git
 cd yay-git
-makepkg --noconfirm -si
+sudo -u $name makepkg --noconfirm -si
 cd /tmp
 sudo -u $name yay -Syu --noconfirm
 
