@@ -90,8 +90,7 @@ echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Defaults !tty_tickets" >> /etc/sudoers
 echo "Enter Username: "
 read name
-useradd -m -g wheel "$name"
-usermod -a -G wheel "$name" && mkdir -p /home/"$name" && chown "$name":wheel /home/"$name"
+useradd -mg wheel "$name"
 passwd $name
 
 #gets rid of beep?
@@ -102,6 +101,9 @@ echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 echo "Installing needed base-devel packages.."
 pacman --noconfirm -S --needed base-devel
 
+git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
+mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
+mkdir /home/$name/downloads
 
 echo "Installing packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
@@ -130,8 +132,6 @@ export repodir="/home/$name/.local/src"
 mkdir -p "$repodir"
 chown -R "$name":wheel "$(dirname "$repodir")"
 
-git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
-mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 
 git clone https://github.com/airkn/dwm $repodir/dwm
 make -C $repodir/dwm clean install
@@ -149,12 +149,10 @@ git clone https://github.com/airkn/othersrc $repodir/othersrc
 make -C $repodir/othersrc/sxiv clean install
 make -C $repodir/othersrc/slock clean install
 
-mkdir /home/$name/downloads
-
 
 echo "Installing nvim plugins//"
 sudo -u "$name" nvim -c "PlugInstall|q|q"
-#chsh -s /bin/zsh "$name"
+chsh -s /bin/zsh "$name"
 
 echo "Installing a few additional packages.."
 pacman --noconfirm -S lib32-pipewire
