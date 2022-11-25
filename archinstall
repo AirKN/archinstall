@@ -92,7 +92,7 @@ echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Defaults !tty_tickets" >> /etc/sudoers
 echo "Enter Username: "
 read name
-useradd -m -g wheel -s /bin/zsh "$name"
+useradd -m -g wheel "$name"
 usermod -a -G wheel "$name" && mkdir -p /home/"$name" && chown "$name":wheel /home/"$name"
 passwd $name
 
@@ -104,28 +104,6 @@ echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 echo "Installing needed base-devel packages.."
 pacman --noconfirm -R pulseaudio
 pacman --noconfirm -S --needed base-devel
-
-echo "Installing packages from the list.."
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
-pacman --noconfirm -S --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
-#pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
-
-echo "Installing the Aur Helper yay.."
-sudo -u $name mkdir -p /home/$name/repos
-cd /home/$name/repos
-sudo -u $name git clone https://aur.archlinux.org/yay.git
-chown -R $name:wheel yay
-cd yay
-sudo -u $name makepkg --noconfirm -si
-cd /tmp
-sudo -u $name yay -Syu --noconfirm
-
-echo "Installing AUR packages from the list.."
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
-sudo -u $name yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
-
-#part3
-echo "Cloning and Building the window manager & dotfiles from github repos.."
 
 export repodir="/home/$name/.local/src"
 mkdir -p "$repodir"
@@ -151,6 +129,29 @@ make -C $repodir/othersrc/sxiv clean install
 make -C $repodir/othersrc/slock clean install
 
 mkdir /home/$name/downloads
+
+
+echo "Installing packages from the list.."
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
+pacman --noconfirm -S --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
+#pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
+
+echo "Installing the Aur Helper yay.."
+sudo -u $name mkdir -p /home/$name/repos
+cd /home/$name/repos
+sudo -u $name git clone https://aur.archlinux.org/yay.git
+chown -R $name:wheel yay
+cd yay
+sudo -u $name makepkg --noconfirm -si
+cd /tmp
+sudo -u $name yay -Syu --noconfirm
+
+echo "Installing AUR packages from the list.."
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
+sudo -u $name yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
+
+#part3
+echo "Cloning and Building the window manager & dotfiles from github repos.."
 
 echo "Installing nvim plugins//"
 sudo -u "$name" nvim -c "PlugInstall|q|q"
