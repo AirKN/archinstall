@@ -102,7 +102,6 @@ echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
 
 echo "Installing needed base-devel packages.."
-pacman --noconfirm -R pulseaudio
 pacman --noconfirm -S --needed base-devel
 
 echo "Installing packages from the list.."

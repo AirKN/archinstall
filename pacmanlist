@@ -41,6 +41,7 @@ xcape
 xclip
 xcompmgr
 xdotool
+xorg
 xorg-server
 xorg-xbacklight
 xorg-xdpyinfo
@@ -50,14 +51,6 @@ xorg-xwininfo
 yt-dlp
 zathura
 zathura-pdf-mupdf
-abook
-gtk-theme-arc-gruvbox-git
-htop-vim
-lf-git
-librewolf-bin
-mutt-wizard-git
+zsh
+zsh-syntax-highlighting
 noto-fonts
-sc-im
-simple-mtpfs
-task-spooler
-zsh-fast-syntax-highlighting-git
