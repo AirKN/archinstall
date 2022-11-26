@@ -14,8 +14,6 @@ This is only designed to work for me, or anyone who understands it enough to cha
 ## How to use
 (You need to be connected to the internet first)
 ```
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/archinstall
-chmod +x archinstall
-./archinstall
+curl raw.githubusercontent.com/airkn/archinstall/main/archinstall | sh
 ```
 You might want to delete the leftover files after rebooting that are gonna be in the root (/) directory
