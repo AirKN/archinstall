@@ -92,6 +92,8 @@ echo "Enter Username: "
 read name
 useradd -mg wheel "$name"
 passwd $name
+chown -R $name:wheel /home/$name
+chmod 700 /home/$name
 
 #gets rid of beep?
 rmmod pcspkr
@@ -158,6 +160,7 @@ make -C $repodir/othersrc/slock install
 
 
 echo "Installing nvim plugins//"
+cp /usr/share/vim/vim90/defaults.vim /usr/share/nvim/runtime/
 sudo -u "$name" nvim -c "PlugInstall|q|q"
 chsh -s /bin/zsh "$name"
 
