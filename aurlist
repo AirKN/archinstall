@@ -1,6 +1,9 @@
 afetch
 apg
 cadmus-appimage
+dracula-cursors-git
+dracula-gtk-theme-git
+dracula-icons-git
 kvantum-theme-matcha
 lf-bin
 libvterm01
@@ -10,6 +13,4 @@ nerd-fonts-noto-sans-mono
 rustdesk
 sc-im
 speedometer
-papirus-icon-theme
 task-spooler
-xcursor-breeze

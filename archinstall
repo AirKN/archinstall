@@ -16,12 +16,12 @@ echo "Enter the drive (sd_): "
 read drive
 cfdisk /dev/$drive
 lsblk
-echo "Enter the linux partition (sd_#): "
-read partition
-mkfs.ext4 /dev/$partition
 echo "Enter the boot partition (sd_#): "
 read bootpart
 mkfs.ext4 /dev/$bootpart
+echo "Enter the linux partition (sd_#): "
+read partition
+mkfs.ext4 /dev/$partition
 lsblk
 echo "Did you create a swap partition? [y/n]"
 read answerp
@@ -60,6 +60,8 @@ sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 ln -sf /usr/share/zoneinfo/Africa/Tunis /etc/localtime
 hwclock --systohc
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+echo "ar_TN.UTF-8 UTF-8" >> /etc/locale.gen
+echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 echo "KEYMAP=us" > /etc/vconsole.conf
@@ -104,6 +106,7 @@ echo "Installing needed base-devel packages.."
 pacman --noconfirm -S --needed base-devel git
 
 
+echo "Cloning and Moving dotfiles from github.."
 git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
 mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 mkdir /home/$name/downloads
@@ -136,11 +139,10 @@ pacman --noconfirm -R pulseaudio
 pacman --noconfirm -S lib32-pipewire
 
 #part3
-echo "Cloning and Building the window manager & dotfiles from github repos.."
+echo "Cloning and Building the window manager & other programs from github repos.."
 export repodir="/home/$name/.local/src"
 sudo -u $name mkdir -p "$repodir"
 #chown -R "$name":wheel "$(dirname "$repodir")"
-
 
 git clone https://github.com/airkn/dwm $repodir/dwm
 make -C $repodir/dwm install
