@@ -107,7 +107,7 @@ pacman --noconfirm -S --needed base-devel git
 
 
 echo "Cloning and Moving dotfiles from github.."
-git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
+sudo -u $name git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
 mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 mkdir /home/$name/downloads
 
@@ -144,27 +144,28 @@ export repodir="/home/$name/.local/src"
 sudo -u $name mkdir -p "$repodir"
 #chown -R "$name":wheel "$(dirname "$repodir")"
 
-git clone https://github.com/airkn/dwm $repodir/dwm
+sudo -u $name git clone https://github.com/airkn/dwm $repodir/dwm
 make -C $repodir/dwm install
 
-git clone https://github.com/airkn/dwmblocks $repodir/dwmblocks
+sudo -u $name git clone https://github.com/airkn/dwmblocks $repodir/dwmblocks
 make -C $repodir/dwmblocks install
 
-git clone https://github.com/airkn/st $repodir/st
+sudo -u $name git clone https://github.com/airkn/st $repodir/st
 make -C $repodir/st install
 
-git clone https://github.com/airkn/dmenu $repodir/dmenu
+sudo -u $name git clone https://github.com/airkn/dmenu $repodir/dmenu
 make -C $repodir/dmenu install
 
-git clone https://github.com/airkn/othersrc $repodir/othersrc
+sudo -u $name git clone https://github.com/airkn/othersrc $repodir/othersrc
 make -C $repodir/othersrc/sxiv install
 make -C $repodir/othersrc/slock install
 
 
 echo "Installing nvim plugins//"
 cp /usr/share/vim/vim90/defaults.vim /usr/share/nvim/runtime/
-sudo -u "$name" nvim -c "PlugInstall|q|q"
+sudo -u $name nvim -c "PlugInstall|q|q"
 chsh -s /bin/zsh "$name"
+sudo -u $name mkdir /home/$name/.local/share/zsh
 
 
 echo "Adding Chaotic-aur mirrorlist.."
