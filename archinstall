@@ -129,25 +129,25 @@ pacman --noconfirm -R pulseaudio
 #part3
 echo "Cloning and Building the window manager & dotfiles from github repos.."
 export repodir="/home/$name/.local/src"
-mkdir -p "$repodir"
-chown -R "$name":wheel "$(dirname "$repodir")"
+sudo -u $name mkdir -p "$repodir"
+#chown -R "$name":wheel "$(dirname "$repodir")"
 
 
 git clone https://github.com/airkn/dwm $repodir/dwm
-make -C $repodir/dwm clean install
+make -C $repodir/dwm install
 
 git clone https://github.com/airkn/dwmblocks $repodir/dwmblocks
-make -C $repodir/dwmblocks clean install
+make -C $repodir/dwmblocks install
 
 git clone https://github.com/airkn/st $repodir/st
-make -C $repodir/st clean install
+make -C $repodir/st install
 
 git clone https://github.com/airkn/dmenu $repodir/dmenu
-make -C $repodir/dmenu clean install
+make -C $repodir/dmenu install
 
 git clone https://github.com/airkn/othersrc $repodir/othersrc
-make -C $repodir/othersrc/sxiv clean install
-make -C $repodir/othersrc/slock clean install
+make -C $repodir/othersrc/sxiv install
+make -C $repodir/othersrc/slock install
 
 
 echo "Installing nvim plugins//"
