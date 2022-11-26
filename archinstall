@@ -70,7 +70,7 @@ echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
 passwd
-pacman --noconfirm -S networkmanager grub git
+pacman --noconfirm -S networkmanager grub
 systemctl enable NetworkManager
 lsblk
 echo "Enter the drive to install grub on (sd_): "
@@ -99,15 +99,20 @@ echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
 
 echo "Installing needed base-devel packages.."
-pacman --noconfirm -S --needed base-devel
+pacman --noconfirm -S --needed base-devel git
+
 
 git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
 mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 mkdir /home/$name/downloads
 
+echo "[multilib]" >> /etc/pacman.conf
+echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+echo "" >> /etc/pacman.conf
+
 echo "Installing packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
-pacman --noconfirm -S --needed $(comm -12 <(pacman -Slq | sort) <(sort pacmanlist))
+pacman --noconfirm -Sy -<pacmanlist
 #pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
 echo "Installing the Aur Helper yay.."
@@ -122,9 +127,11 @@ sudo -u $name yay -Syu --noconfirm
 
 echo "Installing AUR packages from the list.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
-sudo -u $name yay -S --noconfirm --needed $(comm -12 <(yay -Slq | sort) <(sort aurlist))
+sudo -u $name yay -S --noconfirm -<aurlist
 
+echo "Installing a few additional packages.."
 pacman --noconfirm -R pulseaudio
+pacman --noconfirm -S lib32-pipewire
 
 #part3
 echo "Cloning and Building the window manager & dotfiles from github repos.."
@@ -153,9 +160,6 @@ make -C $repodir/othersrc/slock install
 echo "Installing nvim plugins//"
 sudo -u "$name" nvim -c "PlugInstall|q|q"
 chsh -s /bin/zsh "$name"
-
-echo "Installing a few additional packages.."
-pacman --noconfirm -S lib32-pipewire
 
 
 echo "Adding Chaotic-aur mirrorlist.."
