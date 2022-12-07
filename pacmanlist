@@ -1,12 +1,10 @@
 arandr
+aria2
 atool
 bat
 bc
 cronie
 dosfstools
-dracula-cursors-git
-dracula-gtk-theme-git
-dracula-icons-git
 dunst
 exfat-utils
 feh
@@ -19,6 +17,7 @@ gnome-themes-extra
 gtk2
 gtk3
 htop
+jq
 kvantum
 libnotify
 lxappearance
@@ -41,6 +40,9 @@ ntfs-3g
 pamixer
 picom
 pipewire
+pipewire-alsa
+pipewire-audio
+pipewire-jack
 pipewire-pulse
 powertop
 pulsemixer
@@ -56,6 +58,8 @@ thunar
 ueberzug
 unclutter
 unzip
+wireplumber
+xarchiver
 xcape
 xclip
 xcompmgr
