@@ -60,7 +60,7 @@ sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 ln -sf /usr/share/zoneinfo/Africa/Tunis /etc/localtime
 hwclock --systohc
 timedatectl set-timezone Africa/Tunis
-timedatectl set-ntp true
+# timedatectl set-ntp true
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "ar_TN.UTF-8 UTF-8" >> /etc/locale.gen
 echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen
@@ -162,7 +162,7 @@ make -C $repodir/othersrc/sxiv install
 make -C $repodir/othersrc/slock install
 make -C $repodir/othersrc/screenpen install
 
-sudo -u $name git clone https://github.com/airkn/pitchblackgtk /usr/share/themes
+git clone https://github.com/airkn/pitchblackgtk /usr/share/themes/pitchblackgtk
 
 echo "Installing nvim plugins//"
 cp /usr/share/vim/vim90/defaults.vim /usr/share/nvim/runtime/
