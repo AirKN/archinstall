@@ -12,6 +12,7 @@ ffmpeg
 ffmpegthumbnailer
 fontconfig
 fzf
+github-cli
 gnome-keyring
 gnome-themes-extra
 gtk2
@@ -38,6 +39,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 ntfs-3g
 pamixer
+pcmanfm
 picom
 pipewire
 pipewire-alsa
@@ -50,6 +52,7 @@ python-qdarkstyle
 qt5ct
 radare2
 redshift
+screenkey
 scrot
 slock
 socat
@@ -59,6 +62,7 @@ ueberzug
 unclutter
 unzip
 wireplumber
+lf
 xarchiver
 xcape
 xclip
