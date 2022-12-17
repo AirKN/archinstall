@@ -20,6 +20,8 @@ gtk3
 htop
 jq
 kvantum
+lf
+libappindicator-gtk3
 libnotify
 lxappearance
 lynx
@@ -62,7 +64,6 @@ ueberzug
 unclutter
 unzip
 wireplumber
-lf
 xarchiver
 xcape
 xclip

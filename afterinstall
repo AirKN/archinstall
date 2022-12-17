@@ -1,0 +1,14 @@
+#!/bin/sh
+
+sudo timedatectl set-ntp true
+
+echo "Installing the big packages.."
+
+sudo pacman --noconfirm -Sy -<afterlist
+
+sudo touch /var/spool/cron/air
+sudo echo "* * * * * sudo pacman -Sy" >> /var/spool/cron/air
+
+sudo systemctl enable cronie.service
+sudo systemctl start cronie.service
+

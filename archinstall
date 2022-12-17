@@ -220,6 +220,13 @@ fi
 
 rm -rf /home/$name/dotfiles
 
+
+echo "Preparing afterinstall package list installer lol.."
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/afterinstall
+curl -LO raw.githubusercontent.com/airkn/archinstall/main/afterlist
+chmod +x afterinstall
+
+
 clear
 echo "Installation Complete! Please reboot now!"
 
