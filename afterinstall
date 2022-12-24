@@ -12,3 +12,7 @@ sudo echo "0 * * * * sudo pacman -Sy" >> /var/spool/cron/air
 sudo systemctl enable cronie.service
 sudo systemctl start cronie.service
 
+echo "Configuring and logging in to github.."
+gh auth login
+
+
