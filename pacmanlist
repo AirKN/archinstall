@@ -4,6 +4,7 @@ atool
 bat
 bc
 cronie
+cryptsetup
 dosfstools
 dunst
 exfat-utils
@@ -18,6 +19,7 @@ gnome-themes-extra
 gtk2
 gtk3
 htop
+inxi
 jq
 kvantum
 lf
@@ -59,6 +61,7 @@ scrot
 slock
 socat
 sxiv
+syncthing
 thunar
 ueberzug
 unclutter
@@ -76,6 +79,8 @@ xorg-xdpyinfo
 xorg-xinit
 xorg-xprop
 xorg-xwininfo
+yt-dlp
+ytfzf
 zathura
 zathura-pdf-mupdf
 zsh
