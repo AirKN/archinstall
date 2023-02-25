@@ -225,6 +225,10 @@ fi
 
 rm -rf /home/$name/dotfiles
 
+# blocked ips
+cat /home/$name/.loacal/share/.ips >> /etc/hosts
+
+
 
 echo "Preparing afterinstall package list installer lol.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/afterinstall
