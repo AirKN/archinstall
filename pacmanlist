@@ -5,6 +5,7 @@ bat
 bc
 cronie
 cryptsetup
+dash
 dosfstools
 dunst
 exfat-utils
