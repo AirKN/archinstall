@@ -14,21 +14,16 @@
 echo "Welcome to airkn's arch install script"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 lsblk
-echo "Enter the drive (sd_): "
-read drive
+read -p "Drive (sd_): " drive
 cfdisk /dev/$drive
+clear
 lsblk
-echo "Enter the boot partition (sd_#): "
-read bootpart
-echo "Enter the linux partition (sd_#): "
-read partition
-lsblk
-echo "Enter the swap partition (if u created one) [swappart(sd_#)/n]"
-read swappart
+read -p "Boot partition (sd_#): " bootpart
+read -p "Linux (/) partition (sd_#): " partition
+read -p "Swap partition (if u created one) [swappart(sd_#) /n] " swappart
 mkfs.ext4 /dev/$bootpart
 mkfs.ext4 /dev/$partition
-if [[ $sawppart != n ]] ; then
-  read swappart
+if [[ "$swappart" != n ]] ; then
   mkswap /dev/$swappart
   swapon /dev/$swappart
 fi
@@ -40,6 +35,8 @@ fi
 #  mkfs.vfat -F 32 $efipartition
 #fi
 
+clear
+lsblk
 mount /dev/$partition /mnt
 mkdir /mnt/boot
 mount /dev/$bootpart /mnt/boot
@@ -57,9 +54,8 @@ exit
 #part2
 clear
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
-echo "Would you like to use the default timezone? Africa/Tunis? (y) else Enter ur own timezone (Continent/City)"
-read timezn
-if [[ $timezn != y ]] ; then
+read -p "use default timezone? (Africa/Tunis?) [y] or enter ur own timezone [Continent/City] " timezn
+if [[ "$timezn" != y ]] ; then
     ln -sf /usr/share/zoneinfo/$timezn /etc/localtime
     hwclock --systohc
     timedatectl set-timezone $timezn
@@ -70,30 +66,23 @@ else
 fi
 #timedatectl set-ntp true
 
-# all user input is at the start for convenience, u just answer the questions together n watch/ wait for it to complete the jobs (pretty generic when it comes to os installers doe nothing special)
-echo "Hostname: "
-read hostname
+# all user input is at the start for convenience, u just answer the questions together n watch/ wait for it to complete the installation (pretty generic when it comes to os installers doe nothing special)
+read -p "Hostname: " hostname
 passwd
 
 lsblk
-echo "Enter the drive to install grub on (sd_): "
-read drive
+read -p "Drive to install Grub bootloader on (sd_): " drive
 
-echo "Enter Username: "
-read name
+read -p "Username: " name
 passwd $name
 
-echo "Would you like to install NVIDIA proprietary drivers? [y/n] "
-read answer1
+read -p "Install NVIDIA proprietary drivers? [y/n] " answer1
 
-echo "Would you like to install the entirety of the Archstrike PenTesting packages? [y/n] "
-read answer2
+read -p "Install ALL Archstrike PenTesting packages? [y/n] " answer2
 
-echo "Any additional packages you'd like to install? [y/n] "
-read answer3
-if [[ $answer3 = y ]] ; then
-  echo "Which packages? "
-  read packages
+read -p "Additional packages you'd like to install? [y/n] " answer3
+if [[ "$answer3" = y ]] ; then
+  read -p "Which packages? " packages
 fi
 
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
@@ -117,7 +106,7 @@ sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;/^#MAKEFLAGS/s/^#//" /etc/makepkg.conf
 
-# dont ask for password when using sudo (i think initial login is enough to confirm user identity + its a pain having to type a long and complex password everytime u try to do anyth with higher user permissions
+# dont ask for password when using sudo (i think the first login is enough to confirm user identity + its a pain having to type a long and complex password everytime u try to do anyth with higher user permissions, at least on my personal computer which 99.9% of the time im the only one using it)
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "Defaults !tty_tickets" >> /etc/sudoers
 useradd -mg wheel "$name"
@@ -148,7 +137,7 @@ echo "[multilib]" >> /etc/pacman.conf
 echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 echo "" >> /etc/pacman.conf
 
-echo "Installing packages from the list.."
+echo "Installing packages from pacmanlist.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
 pacman --noconfirm -Sy
 while read p; do
@@ -156,7 +145,7 @@ while read p; do
 done <pacmanlist
 # pacman -Rsu --noconfirm $(comm -23 <(pacman -Qq | sort) <(sort packagelist))
 
-echo "Installing the Aur Helper yay.."
+echo "Installing the Aur Helper (yay).."
 cd /home/$name/repos
 sudo -u $name git clone https://aur.archlinux.org/yay.git
 chown -R $name:wheel yay
@@ -233,16 +222,15 @@ sed -i '$d' /etc/pacman.conf
 echo "Include = /etc/pacman.d/archstrike-mirrorlist" >> /etc/pacman.conf
 pacman -Sy --noconfirm
 
-if [[ $answer1 = y ]] ; then
+if [[ "$answer1" = y ]] ; then
     mkdir -p /etc/X11/xorg.conf.d
     mv /home/$name/dotfiles/nvidia/20-nvidia.conf /etc/X11/xorg.conf.d
     sleep 1s
     pacman --noconfirm -S --needed nvidia nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
 fi
 
-if [[ $answer2 = y ]] ; then
-    #echo "You will need to confirm the operations in order to avoid errors"
-    #read
+if [[ "$answer2" = y ]] ; then
+    #read -p "You will need to confirm the operations in order to avoid errors"
     pacman -Ss --noconfirm archstrike --needed
 fi
 
@@ -256,14 +244,14 @@ rm -rf /home/$name/dotfiles
 cat /home/$name/.loacal/share/.ips >> /etc/hosts
 
 
-echo "Preparing afterinstall script list installer lol.."
+echo "Preparing afterinstall script list installer.."
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/afterinstall
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/afterlist
 chmod +x afterinstall
 
 
 clear
-echo "Installation Complete! Please reboot now!"
+echo "Installation Complete. Please reboot now."
 
 sleep 2s
 exit
