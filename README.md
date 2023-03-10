@@ -11,7 +11,8 @@ This is an Arch Linux install script to automate most of the os installation and
 
 ## How to use
 (You need to be connected to the internet first)
-use the iwcrl command to connect to wifi on arch live iso
+
+use the iwctl command to connect to wifi on arch live iso
 ```
 curl -LO raw.githubusercontent.com/airkn/archinstall/main/archinstall && chmod +x archinstall && ./archinstall
 ```
