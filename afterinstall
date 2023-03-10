@@ -15,4 +15,10 @@ sudo systemctl start cronie.service
 echo "Configuring and logging in to github.."
 gh auth login
 
+#downloading backgrounds and extracting them
+wget https://download948.mediafire.com/dlb4h4d7m9cgS5mfUJogx3ufGZ3LEtQQvpEFfCiVCvqekAgbFqESU5mZS6_qBB0PDekk6lvIj06kJEtGFpr46s-QbS9_c78/i9hk1f0yokb3uqf/backgrounds.tar /home/air/downloads
+
+tar -xvf backgrounds.tar -C /home/air
+
+
 

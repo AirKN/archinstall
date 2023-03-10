@@ -12,6 +12,7 @@ exfat-utils
 feh
 ffmpeg
 ffmpegthumbnailer
+figlet
 fontconfig
 fzf
 github-cli
@@ -23,6 +24,7 @@ htop
 inxi
 jq
 kvantum
+leafpad
 lf
 libappindicator-gtk3
 libnotify
