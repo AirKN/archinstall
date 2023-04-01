@@ -54,19 +54,11 @@ exit
 #part2
 clear
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
-read -p "use default timezone? (Africa/Tunis?) [y] or enter ur own timezone [Continent/City] " timezn
-if [[ "$timezn" != y ]] ; then
-    ln -sf /usr/share/zoneinfo/$timezn /etc/localtime
-    hwclock --systohc
-    timedatectl set-timezone $timezn
-else
-    ln -sf /usr/share/zoneinfo/Africa/Tunis /etc/localtime
-    hwclock --systohc
-    timedatectl set-timezone Africa/Tunis
-fi
-#timedatectl set-ntp true
 
 # all user input is at the start for convenience, u just answer the questions together n watch/ wait for it to complete the installation (pretty generic when it comes to os installers doe nothing special)
+
+read -p "use default timezone? (Africa/Tunis?) [y] or enter ur own timezone [Continent/City] " timezn
+
 read -p "Hostname: " hostname
 passwd
 
@@ -84,6 +76,18 @@ read -p "Additional packages you'd like to install? [y/n] " answer3
 if [[ "$answer3" = y ]] ; then
   read -p "Which packages? " packages
 fi
+
+
+if [[ "$timezn" != y ]] ; then
+    ln -sf /usr/share/zoneinfo/$timezn /etc/localtime
+    hwclock --systohc
+    timedatectl set-timezone $timezn
+else
+    ln -sf /usr/share/zoneinfo/Africa/Tunis /etc/localtime
+    hwclock --systohc
+    timedatectl set-timezone Africa/Tunis
+fi
+#timedatectl set-ntp true
 
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "ar_TN.UTF-8 UTF-8" >> /etc/locale.gen

@@ -3,6 +3,8 @@ aria2
 atool
 bat
 bc
+bind
+bmon
 cronie
 cryptsetup
 dash
@@ -41,6 +43,8 @@ mpv
 ncmpcpp
 neofetch
 neovim
+net-tools
+nmap
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
@@ -72,6 +76,7 @@ uget
 unclutter
 unzip
 wget
+whois
 wireplumber
 xarchiver
 xcape
