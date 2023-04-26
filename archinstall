@@ -191,6 +191,8 @@ sudo -u $name git clone https://github.com/airkn/othersrc $repodir/othersrc
 make -C $repodir/othersrc/sxiv install
 make -C $repodir/othersrc/slock install
 make -C $repodir/othersrc/screenpenbuild install
+make -C $repodir/othersrc/sent install
+
 
 git clone https://github.com/airkn/pitchblackgtk /usr/share/themes/pitchblackgtk
 
