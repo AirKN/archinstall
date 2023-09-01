@@ -8,10 +8,10 @@
 #  / ___ \ | ||  _ <| . \| |\  |
 # /_/   \_\___|_| \_\_|\_\_| \_|
 #
-# github.com/airkn
+# github.com/hamedxyz
 
 #part1
-echo "Welcome to airkn's arch install script"
+echo "Welcome to hamedxyz's arch install script"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 lsblk
 read -p "Drive (sd_): " drive
@@ -127,7 +127,7 @@ pacman --noconfirm -S --needed base-devel git
 
 
 echo "Cloning and Moving dotfiles from github.."
-sudo -u $name git clone https://github.com/airkn/dotfiles /home/$name/dotfiles
+sudo -u $name git clone https://github.com/hamedxyz/dotfiles /home/$name/dotfiles
 mv /home/$name/dotfiles/* /home/$name/dotfiles/.* /home/$name
 sudo -u $name mkdir -p /home/$name/downloads
 sudo -u $name mkdir -p /home/$name/programs
@@ -142,7 +142,7 @@ echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 echo "" >> /etc/pacman.conf
 
 echo "Installing packages from pacmanlist.."
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/pacmanlist
+curl -LO raw.githubusercontent.com/hamedxyz/archinstall/main/pacmanlist
 pacman --noconfirm -Sy
 while read p; do
     pacman --noconfirm -S "$p"
@@ -159,7 +159,7 @@ cd /tmp
 sudo -u $name yay -Syu --noconfirm
 
 echo "Installing AUR packages from the list.."
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/aurlist
+curl -LO raw.githubusercontent.com/hamedxyz/archinstall/main/aurlist
 while read p; do
     sudo -u $name yay -S --noconfirm "$p"
 done <aurlist
@@ -175,26 +175,26 @@ export repodir="/home/$name/.local/src"
 sudo -u $name mkdir -p "$repodir"
 #chown -R "$name":wheel "$(dirname "$repodir")"
 
-sudo -u $name git clone https://github.com/airkn/dwm $repodir/dwm
+sudo -u $name git clone https://github.com/hamedxyz/dwm $repodir/dwm
 make -C $repodir/dwm install
 
-sudo -u $name git clone https://github.com/airkn/dwmblocks $repodir/dwmblocks
+sudo -u $name git clone https://github.com/hamedxyz/dwmblocks $repodir/dwmblocks
 make -C $repodir/dwmblocks install
 
-sudo -u $name git clone https://github.com/airkn/st $repodir/st
+sudo -u $name git clone https://github.com/hamedxyz/st $repodir/st
 make -C $repodir/st install
 
-sudo -u $name git clone https://github.com/airkn/dmenu $repodir/dmenu
+sudo -u $name git clone https://github.com/hamedxyz/dmenu $repodir/dmenu
 make -C $repodir/dmenu install
 
-sudo -u $name git clone https://github.com/airkn/othersrc $repodir/othersrc
+sudo -u $name git clone https://github.com/hamedxyz/othersrc $repodir/othersrc
 make -C $repodir/othersrc/sxiv install
 make -C $repodir/othersrc/slock install
 make -C $repodir/othersrc/screenpenbuild install
 make -C $repodir/othersrc/sent install
 
 
-git clone https://github.com/airkn/pitchblackgtk /usr/share/themes/pitchblackgtk
+git clone https://github.com/hamedxyz/pitchblackgtk /usr/share/themes/pitchblackgtk
 
 echo "Installing nvim plugins//"
 cp /usr/share/vim/vim90/defaults.vim /usr/share/nvim/runtime/
@@ -251,8 +251,8 @@ cat /home/$name/.loacal/share/.ips >> /etc/hosts
 
 
 echo "Preparing afterinstall script list installer.."
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/afterinstall
-curl -LO raw.githubusercontent.com/airkn/archinstall/main/afterlist
+curl -LO raw.githubusercontent.com/hamedxyz/archinstall/main/afterinstall
+curl -LO raw.githubusercontent.com/hamedxyz/archinstall/main/afterlist
 chmod +x afterinstall
 
 

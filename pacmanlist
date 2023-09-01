@@ -8,6 +8,7 @@ bmon
 cronie
 cryptsetup
 dash
+dictd
 dosfstools
 dunst
 exfat-utils
@@ -68,6 +69,7 @@ qrencode
 qt5ct
 radare2
 redshift
+scrcpy
 screenkey
 scrot
 simple-mtpfs
@@ -77,7 +79,8 @@ sxiv
 syncthing
 texlive-core
 thunar
-transmission-gtk
+urlscan
+newsboat
 ueberzug
 uget
 unclutter
