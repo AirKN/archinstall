@@ -9,26 +9,20 @@ while read p; do
     sudo yay --noconfirm -S "$p"
 done <afterlist
 
-sudo systemctl enable cronie.service
-sudo systemctl start cronie.service
+sudo systemctl enable --now cronie.service
 
 echo "Configuring and logging in to github.."
 gh auth login
-
-#downloading backgrounds and extracting them
-wget https://download948.mediafire.com/dlb4h4d7m9cgS5mfUJogx3ufGZ3LEtQQvpEFfCiVCvqekAgbFqESU5mZS6_qBB0PDekk6lvIj06kJEtGFpr46s-QbS9_c78/i9hk1f0yokb3uqf/backgrounds.tar -P $HOME/downloads
-
-tar -xvf $HOME/downloads/backgrounds.tar -C $HOME
 
 cat ~/.config/VSCodium/User/codium_extensions_list | xargs -n 1 codium --install-extension
 
 betterdiscordctl install
 
-sudo pacman --noconfirm -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables libguestfs
-
-systemctl enable libvirtd
-systemctl start libvirtd
-sudo usermod -a -G libvirt $(whoami)
-systemctl restart libvirtd
+# qemu setup
+# sudo pacman --noconfirm -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables libguestfs
+# systemctl enable libvirtd
+# systemctl start libvirtd
+# sudo usermod -a -G libvirt $(whoami)
+# systemctl restart libvirtd
 
 
